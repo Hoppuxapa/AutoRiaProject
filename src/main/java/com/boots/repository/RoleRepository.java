@@ -1,4 +1,8 @@
 package com.boots.repository;
 
-public interface RoleRepository {
+import com.boots.users.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+public interface RoleRepository extends JpaRepository<UserRole, Long> {
 }

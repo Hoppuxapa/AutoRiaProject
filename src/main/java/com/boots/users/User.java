@@ -1,19 +1,52 @@
 package com.boots.users;
+import javax.management.relation.Role;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
+@Entity
 public class User {
     public User() {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Size(min=2, message = "Не меньше 2 знаков")
     private String firstName;
+    @Size(min=2, message = "Не меньше 2 знаков")
     private String lastName;
+    @Size(min=5, message = "Не меньше 5 знаков")
     private String email;
     private UserRole userRole;
     private UserStatus status;
+    @Size(min=2, message = "Не меньше 2 знаков")
     private String login;
+    @Size(min=2, message = "Не меньше 2 знаков")
     private String password;
-    private List browserHistory;
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    @Transient
+    private String passwordConfirm;
+    private List browserHistory;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -54,7 +87,6 @@ public class User {
     public void setStatus(UserStatus status) {
         this.status = status;
     }
-
 
     public String getLogin() {
         return login;
