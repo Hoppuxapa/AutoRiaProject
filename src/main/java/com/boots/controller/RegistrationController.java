@@ -1,45 +1,40 @@
 package com.boots.controller;
 
-import com.boots.service.UserService;
+
+import com.boots.repository.UserRepository;
 import com.boots.users.User;
+import com.boots.users.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
 
 @Controller
 public class RegistrationController {
-
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("userForm", new User());
-
+    public String registration() {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
+    public String addUser(User user, Map<String, Object> model) {
+        User userFromDb = userRepository.findAllByName(user.getUsername());
 
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            model.addAttribute("passwordError", "Пароли не совпадают");
-            return "registration";
-        }
-        if (!userService.saveUser(userForm)) {
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
+        if (userFromDb != null) {
+            model.put("message", "User exists!");
             return "registration";
         }
 
-        return "redirect:/";
+        user.setActive(true);
+        user.setRoles(Collections.singleton(UserRole.USER));
+        userRepository.save(user);
+
+        return "redirect:/login";
     }
 }

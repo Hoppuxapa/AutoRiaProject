@@ -1,3 +1,4 @@
+/*
 package com.boots.controller;
 
 import com.boots.service.UserService;
@@ -35,4 +36,4 @@ public class AdminController {
         model.addAttribute("allUsers", userService.usersList(userId));
         return "admin";
     }
-}
+}*/
