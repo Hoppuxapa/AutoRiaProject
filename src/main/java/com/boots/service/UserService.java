@@ -39,10 +39,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findAllByName(name);
     }
 
-    public List<User> findWhereEmailIsGmail() {
-        return userRepository.findWhereEmailIsGmail();
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return (UserDetails) userRepository.findAllByName(username);
