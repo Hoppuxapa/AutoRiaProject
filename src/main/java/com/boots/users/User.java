@@ -1,44 +1,30 @@
 package com.boots.users;
-import javax.management.relation.Role;
+
 import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
-    public User() {
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Size(min=2, message = "Не меньше 2 знаков")
-    private String firstName;
-    @Size(min=2, message = "Не меньше 2 знаков")
-    private String lastName;
-    @Size(min=5, message = "Не меньше 5 знаков")
-    private String email;
-    private UserRole userRole;
-    private UserStatus status;
-    @Size(min=2, message = "Не меньше 2 знаков")
-    private String login;
-    @Size(min=2, message = "Не меньше 2 знаков")
+    private String username;
     private String password;
+    private boolean active;
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
+    public Set<UserRole> getRoles() {
+        return roles;
     }
 
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 
-    @Transient
-    private String passwordConfirm;
-    private List browserHistory;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<UserRole> roles;
 
     public Long getId() {
         return id;
@@ -48,53 +34,15 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
     public String getPassword() {
         return password;
@@ -104,8 +52,12 @@ public class User {
         this.password = password;
     }
 
-    public List getBrowserHistory() {
-        return browserHistory;
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

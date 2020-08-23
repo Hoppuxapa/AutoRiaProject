@@ -1,3 +1,4 @@
+/*
 package com.boots.users;
 
 public enum UserStatus {
@@ -14,3 +15,4 @@ public enum UserStatus {
         return status;
     }
 }
+*/
